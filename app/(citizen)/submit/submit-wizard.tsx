@@ -756,6 +756,10 @@ export function SubmitWizard({
         ) : null}
 
         {/* ------------------------------------------------ step 4: the scale */}
+        {/* Every question here is a choice card: the radio input stays in the
+            DOM (keyboard, screen readers, drafts all unchanged) but is visually
+            hidden — the whole card is the control, and the selected card glows
+            (see .milan-choice in globals.css). */}
         {state.step === 4 ? (
           <div className="space-y-6">
             <fieldset>
@@ -765,21 +769,21 @@ export function SubmitWizard({
               <p className="mt-1 text-xs text-muted-foreground">
                 An estimate is fine. Nobody expects an exact number.
               </p>
-              <div className="mt-3 space-y-2">
+              <div className="mt-3 space-y-2.5">
                 {PEOPLE_BUCKETS.map((b) => (
-                  <label
-                    key={b.value}
-                    className="flex min-h-11 items-center gap-3 milan-glass rounded-xl p-3"
-                  >
+                  <label key={b.value} className="milan-choice flex items-center gap-3 rounded-xl p-3.5">
                     <input
                       type="radio"
                       name="people"
-                      className="size-5"
+                      className="sr-only"
                       value={b.value}
                       checked={state.peopleAffectedBucket === b.value}
                       onChange={() => set({ peopleAffectedBucket: b.value })}
                     />
-                    <span className="text-sm">{b.label}</span>
+                    <span className="milan-choice-label flex-1 text-sm">{b.label}</span>
+                    <span className="milan-choice-dot" aria-hidden>
+                      <Check aria-hidden className="size-3.5" strokeWidth={3} />
+                    </span>
                   </label>
                 ))}
               </div>
@@ -787,22 +791,22 @@ export function SubmitWizard({
 
             <fieldset>
               <legend className="text-sm font-medium">How often does it happen?</legend>
-              <div className="mt-3 space-y-2">
+              <div className="mt-3 space-y-2.5">
                 {RECURRENCE.map((r) => (
-                  <label
-                    key={r}
-                    className="flex min-h-11 items-center gap-3 milan-glass rounded-xl p-3"
-                  >
+                  <label key={r} className="milan-choice flex items-center gap-3 rounded-xl p-3.5">
                     <input
                       type="radio"
                       name="recurrence"
-                      className="size-5"
+                      className="sr-only"
                       value={r}
                       checked={state.recurrence === r}
                       onChange={() => set({ recurrence: r })}
                     />
-                    <span className="text-sm capitalize">
+                    <span className="milan-choice-label flex-1 text-sm capitalize">
                       {r === "one-off" ? "Once, not repeating" : r}
+                    </span>
+                    <span className="milan-choice-dot" aria-hidden>
+                      <Check aria-hidden className="size-3.5" strokeWidth={3} />
                     </span>
                   </label>
                 ))}
@@ -815,12 +819,12 @@ export function SubmitWizard({
                 {[1, 2, 3, 4, 5].map((n) => (
                   <label
                     key={n}
-                    className="flex min-h-11 flex-col items-center gap-1 milan-glass rounded-xl p-3"
+                    className="milan-choice flex min-h-14 flex-col items-center justify-center rounded-xl p-2"
                   >
                     <input
                       type="radio"
                       name="urgency"
-                      className="size-5"
+                      className="sr-only"
                       value={n}
                       checked={state.urgencySelfReport === n}
                       onChange={() => set({ urgencySelfReport: n })}
@@ -828,7 +832,7 @@ export function SubmitWizard({
                         n === 1 ? "1, not urgent" : n === 5 ? "5, very urgent" : String(n)
                       }
                     />
-                    <span className="text-sm font-medium">{n}</span>
+                    <span className="milan-choice-number text-lg font-semibold">{n}</span>
                   </label>
                 ))}
               </div>

@@ -533,6 +533,82 @@
   .milan-rise {
     animation: milan-rise 0.5s cubic-bezier(0.22, 0.9, 0.3, 1) both;
   }
+
+  /* ── Choice cards (the scale step of the submit wizard) ────────────────
+     The whole option is the control. The radio input stays in the DOM —
+     keyboard arrows, focus and screen-reader semantics are untouched — but
+     it is visually hidden, and the card around it carries the state.
+     Selected cards light up with a gradient wash and a soft halo drawn from
+     the same accent ramp as the glass panels, so both skins glow correctly
+     without a single hardcoded colour. */
+  .milan-choice {
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--tint);
+    transition:
+      border-color 0.18s ease,
+      background-color 0.18s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .milan-choice:hover {
+    border-color: color-mix(in srgb, var(--grad-1) 45%, var(--border));
+  }
+
+  .milan-choice:has(input:checked) {
+    border-color: transparent;
+    background: linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--grad-1) 16%, var(--card)),
+      color-mix(in srgb, var(--grad-3) 12%, var(--card))
+    );
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--grad-1) 65%, transparent),
+      0 0 24px -2px color-mix(in srgb, var(--grad-3) 45%, transparent),
+      0 14px 34px -18px color-mix(in srgb, var(--grad-1) 55%, transparent);
+  }
+
+  .milan-choice:has(input:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* The selection dot: a quiet ring that fills with the accent gradient and
+     reveals its check mark once the card is chosen. */
+  .milan-choice-dot {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 9999px;
+    border: 1.5px solid var(--input);
+    color: transparent;
+    transition:
+      border-color 0.18s ease,
+      background-color 0.18s ease,
+      color 0.18s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .milan-choice:has(input:checked) .milan-choice-dot {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--grad-1), var(--grad-3));
+    color: var(--primary-foreground);
+    box-shadow: 0 0 12px -2px color-mix(in srgb, var(--grad-3) 80%, transparent);
+  }
+
+  .milan-choice:has(input:checked) .milan-choice-label {
+    color: var(--ink-strong);
+  }
+
+  /* On the urgency strip the number itself takes the gradient when chosen. */
+  .milan-choice:has(input:checked) .milan-choice-number {
+    background-image: linear-gradient(120deg, var(--grad-1), var(--grad-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 @keyframes milan-shimmer {
